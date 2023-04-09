@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "poolcop"
+version = "0.0.1"
+description = "Asynchronous Python client for the PoolCopilot API"
+authors = ["Sander Striker <s.striker@striker.nl>"]
+maintainers = ["Sander Striker <s.striker@striker.nl>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/sstriker/python-poolcop"
+repository = "https://github.com/sstriker/python-poolcop"
+documentation = "https://github.com/sstriker/python-poolcop"
+keywords = ["poolcop", "poolcopilot", "api", "async", "client"]
+classifiers = [
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    { include = "poolcop" }
+]
+
+[tool.poetry.dependencies]
+aiohttp = ">=3.0.0"
+python = "^3.10"
+yarl = ">=1.6.0"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/sstriker/python-poolcop/issues"
+Changelog = "https://github.com/sstriker/python-poolcop/releases"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

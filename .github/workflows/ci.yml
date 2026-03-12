@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-ruff@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
       - run: ruff check poolcop/
       - run: ruff format --check poolcop/
 
@@ -26,4 +29,4 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install poetry && poetry install --with dev
-      - run: pytest
+      - run: poetry run pytest

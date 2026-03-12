@@ -29,6 +29,7 @@ class PoolCopilot:
     api_key: str | None = None
     request_timeout: float = 10.0
     session: ClientSession | None = None
+    lang: str = "en"
 
     _close_session: bool = False
     _token: str = None
@@ -48,6 +49,7 @@ class PoolCopilot:
         headers = {
             "Accept": "application/json",
             "User-Agent": USER_AGENT,
+            "X-PoolCopilot-Lang": self.lang,
         }
         if self._token is not None:
             headers["PoolCop-Token"] = self._token
@@ -197,12 +199,17 @@ class PoolCopilot:
 
     async def set_pump_speed(self, speed: int) -> dict[str, Any]:
         """Set pump to a certain speed."""
-        assert speed in {1, 2, 3}
+        if speed not in {1, 2, 3}:
+            raise ValueError(f"Invalid pump speed: {speed}. Must be 1, 2, or 3.")
         return await self._request(f"command/pump/{speed}", method=METH_POST)
 
     async def toggle_aux(self, aux_id: int) -> dict[str, Any]:
         """Toggle aux on/off."""
-        return await self._request("command/aux/{aux_id}", method=METH_POST)
+        return await self._request(f"command/aux/{aux_id}", method=METH_POST)
+
+    async def toggle_auxiliary(self, aux_id: int) -> dict[str, Any]:
+        """Toggle auxiliary on/off (alias for toggle_aux)."""
+        return await self.toggle_aux(aux_id)
 
     async def clear_alarm(self) -> dict[str, Any]:
         """Clear alarm."""
@@ -210,7 +217,20 @@ class PoolCopilot:
 
     async def set_valve_position(self, position: int) -> dict[str, Any]:
         """Set valve in a certain position."""
-        return await self._request("command/valve/{position}", method=METH_POST)
+        return await self._request(f"command/valve/{position}", method=METH_POST)
+
+    async def set_force_filtration(self, hours: int) -> dict[str, Any]:
+        """Set forced filtration mode for a specific duration.
+        
+        Args:
+            hours: Number of hours (24, 48, or 72) to force filtration
+            
+        Returns:
+            API response with command status
+        """
+        if hours not in {24, 48, 72}:
+            raise ValueError(f"Invalid forced filtration hours: {hours}. Must be 24, 48, or 72.")
+        return await self._request(f"command/force/{hours}", method=METH_POST)
 
     async def close(self) -> None:
         """Close open client session."""

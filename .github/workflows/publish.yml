@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install poetry && poetry install --with dev
-      - run: pytest
+      - run: poetry run pytest
 
   build:
     needs: test

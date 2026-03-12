@@ -15,9 +15,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 packages = [
@@ -33,6 +35,38 @@ yarl = ">=1.6.0"
 "Bug Tracker" = "https://github.com/sstriker/python-poolcop/issues"
 Changelog = "https://github.com/sstriker/python-poolcop/releases"
 
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.0"
+pytest-asyncio = ">=0.21"
+pytest-cov = ">=4.0"
+aioresponses = ">=0.7"
+ruff = ">=0.6"
+pre-commit = ">=3.0"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "B",   # flake8-bugbear
+  "UP",  # pyupgrade
+  "SIM", # flake8-simplify
+  "S",   # flake8-bandit
+  "RUF", # ruff-specific
+]
+ignore = [
+  "E501", # line length handled by formatter
+]
+
+[tool.pytest.ini_options]
+addopts = "-q --cov=poolcop --cov-report=term-missing"
+testpaths = ["tests"]
+asyncio_mode = "auto"

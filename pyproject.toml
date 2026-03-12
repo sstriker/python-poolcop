@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poolcop"
-version = "0.0.1"
+version = "0.1.0"
 description = "Asynchronous Python client for the PoolCopilot API"
 authors = ["Sander Striker <s.striker@striker.nl>"]
 maintainers = ["Sander Striker <s.striker@striker.nl>"]
@@ -28,6 +28,7 @@ packages = [
 
 [tool.poetry.dependencies]
 aiohttp = ">=3.0.0"
+async-timeout = ">=4.0.0"
 python = "^3.10"
 yarl = ">=1.6.0"
 

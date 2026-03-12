@@ -42,9 +42,9 @@ def mock_api():
         yield m
 
 
-def _mock_auth(mock_api):
+def _mock_auth(mock_api, repeat=False):
     """Add auth token response to mock."""
-    mock_api.post(TOKEN_URL, payload=TOKEN_RESPONSE)
+    mock_api.post(TOKEN_URL, payload=TOKEN_RESPONSE, repeat=repeat)
 
 
 async def test_status(poolcop, mock_api):
@@ -116,7 +116,7 @@ async def test_toggle_pump(poolcop, mock_api):
 
 async def test_set_pump_speed_valid(poolcop, mock_api):
     """Test setting valid pump speeds."""
-    _mock_auth(mock_api)
+    _mock_auth(mock_api, repeat=True)
     for speed in (1, 2, 3):
         mock_api.post(
             f"{BASE_URL}/command/pump/{speed}",
@@ -179,7 +179,7 @@ async def test_set_valve_position(poolcop, mock_api):
 
 async def test_set_force_filtration_valid(poolcop, mock_api):
     """Test valid forced filtration durations."""
-    _mock_auth(mock_api)
+    _mock_auth(mock_api, repeat=True)
     for hours in (24, 48, 72):
         mock_api.post(
             f"{BASE_URL}/command/force/{hours}",

@@ -1,4 +1,5 @@
 """Constants for PoolCopilot API client."""
+
 from importlib import metadata
 from typing import Final
 
@@ -26,12 +27,12 @@ AUX_LABEL_GARDEN_3: Final = 14
 AUX_LABEL_AVAILABLE: Final = 15
 
 # Fixed-function labels (16-27) — assigned by hardware config
-AUX_LABEL_WASTE_VALVE: Final = 16       # Fixed to aux 5
-AUX_LABEL_SPEED_CONTROL: Final = 17     # Fixed to aux 1-3
-AUX_LABEL_ORP_CONTROL: Final = 18       # Fixed to aux 6
+AUX_LABEL_WASTE_VALVE: Final = 16  # Fixed to aux 5
+AUX_LABEL_SPEED_CONTROL: Final = 17  # Fixed to aux 1-3
+AUX_LABEL_ORP_CONTROL: Final = 18  # Fixed to aux 6
 AUX_LABEL_REMNANT_FIXED: Final = 19
-AUX_LABEL_POOL_COVER: Final = 20        # XM8: aux 13-15
-AUX_LABEL_JET_STREAM: Final = 21        # XM8: aux 13-15
+AUX_LABEL_POOL_COVER: Final = 20  # XM8: aux 13-15
+AUX_LABEL_JET_STREAM: Final = 21  # XM8: aux 13-15
 AUX_LABEL_EXTERNAL_WARNINGS: Final = 22
 AUX_LABEL_CLEANING_VALVE: Final = 23
 AUX_LABEL_RINSING_VALVE: Final = 24
@@ -72,8 +73,8 @@ AUX_LABEL_NAMES: Final[dict[int, str]] = {
 }
 
 # --- Port constraints ---
-AUX_MAX_CCU: Final = 7    # Standard CCU: aux 1-7
-AUX_MAX_XM8: Final = 15   # With XM8 expansion: aux 8-15
+AUX_MAX_CCU: Final = 7  # Standard CCU: aux 1-7
+AUX_MAX_XM8: Final = 15  # With XM8 expansion: aux 8-15
 
 # --- Binary input function IDs ---
 # CCU: Input 1-2, XM8: Input 3-10

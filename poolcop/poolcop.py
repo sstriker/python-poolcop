@@ -1,14 +1,15 @@
 """Asynchronous client for the PoolCopilot API."""
+
 from __future__ import annotations
 
 import asyncio
 import socket
 import time
 from dataclasses import dataclass
+from http import HTTPStatus
 from typing import Any, cast
 
 import async_timeout
-from http import HTTPStatus
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
 from aiohttp.hdrs import METH_GET, METH_POST
 from yarl import URL
@@ -16,9 +17,9 @@ from yarl import URL
 from .const import API_HOST, USER_AGENT
 from .exceptions import (
     PoolCopilotConnectionError,
+    PoolCopilotError,
     PoolCopilotInvalidKeyError,
     PoolCopilotRateLimitError,
-    PoolCopilotError,
 )
 
 
@@ -221,15 +222,17 @@ class PoolCopilot:
 
     async def set_force_filtration(self, hours: int) -> dict[str, Any]:
         """Set forced filtration mode for a specific duration.
-        
+
         Args:
             hours: Number of hours (24, 48, or 72) to force filtration
-            
+
         Returns:
             API response with command status
         """
         if hours not in {24, 48, 72}:
-            raise ValueError(f"Invalid forced filtration hours: {hours}. Must be 24, 48, or 72.")
+            raise ValueError(
+                f"Invalid forced filtration hours: {hours}. Must be 24, 48, or 72."
+            )
         return await self._request(f"command/force/{hours}", method=METH_POST)
 
     async def close(self) -> None:

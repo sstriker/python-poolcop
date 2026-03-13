@@ -302,3 +302,44 @@ async def test_provided_session_not_closed(mock_api):
     # Session should still be open
     assert not session.closed
     await session.close()
+
+
+async def test_request_non_json_content_type(poolcop, mock_api):
+    """text/html → PoolCopilotError."""
+    from poolcop import PoolCopilotError
+
+    _mock_auth(mock_api)
+    mock_api.get(
+        STATUS_URL,
+        body="<html>Error</html>",
+        content_type="text/html",
+    )
+
+    async with poolcop:
+        with pytest.raises(PoolCopilotError):
+            await poolcop.status()
+
+
+async def test_request_connection_error(poolcop, mock_api):
+    """socket.gaierror during request."""
+    import socket
+
+    _mock_auth(mock_api)
+    mock_api.get(STATUS_URL, exception=socket.gaierror("DNS failure"))
+
+    async with poolcop:
+        with pytest.raises(PoolCopilotConnectionError):
+            await poolcop.status()
+
+
+async def test_command_history(poolcop, mock_api):
+    """Correct endpoint called."""
+    _mock_auth(mock_api)
+    mock_api.get(
+        f"{BASE_URL}/history/commands/0",
+        payload={"api_token": {"max_limit": 80}, "commands": []},
+    )
+
+    async with poolcop:
+        result = await poolcop.command_history(0)
+    assert result["commands"] == []

@@ -198,17 +198,24 @@ async def test_set_force_filtration_invalid(poolcop):
         await poolcop.set_force_filtration(12)
 
 
-async def test_lang_header(poolcop, mock_api):
-    """Test that X-PoolCopilot-Lang header is set."""
-    poolcop.lang = "fr"
+async def test_no_lang_header_by_default(poolcop):
+    """Test that X-PoolCopilot-Lang header is not sent by default."""
     headers = poolcop._headers()
-    assert headers["X-PoolCopilot-Lang"] == "fr"
+    assert "X-PoolCopilot-Lang" not in headers
 
 
-async def test_lang_header_default_en(poolcop):
-    """Test that default language is English."""
+async def test_lang_header_when_set():
+    """Test that X-PoolCopilot-Lang header is sent when lang is set."""
+    poolcop = PoolCopilot(api_key="test-key", lang="en")
     headers = poolcop._headers()
     assert headers["X-PoolCopilot-Lang"] == "en"
+
+
+async def test_lang_header_custom_value():
+    """Test that lang header uses the configured language."""
+    poolcop = PoolCopilot(api_key="test-key", lang="fr")
+    headers = poolcop._headers()
+    assert headers["X-PoolCopilot-Lang"] == "fr"
 
 
 async def test_alarm_history(poolcop, mock_api):

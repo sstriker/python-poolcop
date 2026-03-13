@@ -28,9 +28,9 @@ class PoolCopilot:
     """Main class for handling data fetching from PoolCopilot."""
 
     api_key: str | None = None
+    lang: str | None = None
     request_timeout: float = 10.0
     session: ClientSession | None = None
-    lang: str = "en"
 
     _close_session: bool = False
     _token: str = None
@@ -50,10 +50,11 @@ class PoolCopilot:
         headers = {
             "Accept": "application/json",
             "User-Agent": USER_AGENT,
-            "X-PoolCopilot-Lang": self.lang,
         }
         if self._token is not None:
             headers["PoolCop-Token"] = self._token
+        if self.lang is not None:
+            headers["X-PoolCopilot-Lang"] = self.lang
         return headers
 
     async def _authenticate(self) -> None:

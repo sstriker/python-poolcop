@@ -257,6 +257,38 @@ async def test_close_session(mock_api):
     assert poolcop.session is None
 
 
+async def test_token_limit_none_before_any_call(poolcop):
+    """Test that token_limit is None before any API call."""
+    assert poolcop.token_limit is None
+
+
+async def test_token_limit_after_status(poolcop, mock_api):
+    """Test that token_limit reflects API response after status call."""
+    _mock_auth(mock_api)
+    mock_api.get(STATUS_URL, payload=STATUS_RESPONSE)
+
+    async with poolcop:
+        await poolcop.status()
+
+    assert poolcop.token_limit == 89
+
+
+async def test_token_expire_default(poolcop):
+    """Test that token_expire is 0 before any call."""
+    assert poolcop.token_expire == 0
+
+
+async def test_token_expire_after_status(poolcop, mock_api):
+    """Test that token_expire reflects API response after status call."""
+    _mock_auth(mock_api)
+    mock_api.get(STATUS_URL, payload=STATUS_RESPONSE)
+
+    async with poolcop:
+        await poolcop.status()
+
+    assert poolcop.token_expire == 9999999999
+
+
 async def test_provided_session_not_closed(mock_api):
     """Test that a user-provided session is not closed."""
     session = ClientSession()

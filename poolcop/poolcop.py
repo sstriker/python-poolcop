@@ -43,6 +43,16 @@ class PoolCopilot:
         """Primary PoolCop Identifier"""
         return self._poolcop_id
 
+    @property
+    def token_limit(self) -> int | None:
+        """Remaining API calls in the current token window."""
+        return self._token_limit
+
+    @property
+    def token_expire(self) -> int:
+        """Unix timestamp when the current token window expires."""
+        return self._token_expire
+
     def _build_url(self, uri):
         return URL.build(scheme="https", host=API_HOST, path=f"/api/v1/{uri}")
 

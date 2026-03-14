@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poolcop"
-version = "0.5.0"
+version = "0.6.0"
 description = "Asynchronous Python client for the PoolCopilot API"
 authors = ["Sander Striker <s.striker@striker.nl>"]
 maintainers = ["Sander Striker <s.striker@striker.nl>"]

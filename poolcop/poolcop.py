@@ -69,7 +69,9 @@ class PoolCopilot:
 
     async def _authenticate(self) -> None:
         """Authenticate and store a token."""
-        assert self.session is not None  # Caller must ensure session exists
+        if self.session is None:
+            msg = "_authenticate called without a session"
+            raise RuntimeError(msg)
 
         expire_in = self._token_expire - time.time()
         if self._token is not None and expire_in > 0:

@@ -113,7 +113,19 @@ class PoolCopilot:
             raise PoolCopilotInvalidKeyError(
                 "Could not authenticate with the provided API key."
             )
-        # self._parse_token(data.get("values", {"max_limit": 1}))
+
+        # Parse quota and expiry from response headers (RateLimit-Limit,
+        # RateLimit-Expire).  This caches the token so we don't re-auth
+        # on every request, and gives the caller accurate quota info.
+        try:
+            self._token_limit = int(response.headers["RateLimit-Limit"])
+        except (KeyError, ValueError, TypeError):
+            self._token_limit = 1  # Safe fallback: allows at least one request
+        try:
+            self._token_expire = int(response.headers["RateLimit-Expire"])
+        except (KeyError, ValueError, TypeError):
+            # No expiry info — token won't be cached, re-auth next call
+            self._token_expire = 0
 
     def _parse_token(self, api_token: dict[str, Any]) -> None:
         self._token_limit = int(api_token.get("max_limit", 0))

@@ -33,14 +33,14 @@ class PoolCopilot:
     session: ClientSession | None = None
 
     _close_session: bool = False
-    _token: str = None
+    _token: str | None = None
     _token_expire: int = 0
     _token_limit: int | None = None
     _poolcop_id: int | None = None
 
     @property
-    def poolcop_id(self):
-        """Primary PoolCop Identifier"""
+    def poolcop_id(self) -> int | None:
+        """Primary PoolCop Identifier."""
         return self._poolcop_id
 
     @property
@@ -53,10 +53,10 @@ class PoolCopilot:
         """Unix timestamp when the current token window expires."""
         return self._token_expire
 
-    def _build_url(self, uri):
+    def _build_url(self, uri: str) -> URL:
         return URL.build(scheme="https", host=API_HOST, path=f"/api/v1/{uri}")
 
-    def _headers(self):
+    def _headers(self) -> dict[str, str]:
         headers = {
             "Accept": "application/json",
             "User-Agent": USER_AGENT,
@@ -68,7 +68,8 @@ class PoolCopilot:
         return headers
 
     async def _authenticate(self) -> None:
-        """Authenticate and store a token"""
+        """Authenticate and store a token."""
+        assert self.session is not None  # Caller must ensure session exists
 
         expire_in = self._token_expire - time.time()
         if self._token is not None and expire_in > 0:
@@ -91,7 +92,7 @@ class PoolCopilot:
                 "Timeout occurred while connecting to the API."
             ) from exception
         except ClientResponseError as exception:
-            if exception.code == HTTPStatus.FORBIDDEN:
+            if exception.status == HTTPStatus.FORBIDDEN:
                 raise PoolCopilotInvalidKeyError(
                     "Could not authenticate with the provided API key."
                 ) from exception
@@ -112,7 +113,7 @@ class PoolCopilot:
             )
         # self._parse_token(data.get("values", {"max_limit": 1}))
 
-    def _parse_token(self, api_token):
+    def _parse_token(self, api_token: dict[str, Any]) -> None:
         self._token_limit = int(api_token.get("max_limit", 0))
         self._token_expire = int(api_token.get("expire", 0))
         self._poolcop_id = api_token.get("poolcop_id", self._poolcop_id)

@@ -171,6 +171,11 @@ class PoolCopilot:
             raise PoolCopilotConnectionError(
                 msg,
             ) from exception
+        except ClientResponseError as exception:
+            msg = f"API returned HTTP {exception.status}: {exception.message}"
+            raise PoolCopilotConnectionError(
+                msg,
+            ) from exception
         except (ClientError, socket.gaierror) as exception:
             msg = "Error occurred while communicating with the API."
             raise PoolCopilotConnectionError(
@@ -194,13 +199,6 @@ class PoolCopilot:
         """Get PoolCop status."""
         data = await self._request(
             "status",
-        )
-        return data
-
-    async def alarm_history(self, offset: int = 0) -> dict[str, Any]:
-        """Get PoolCop alarm history."""
-        data = await self._request(
-            f"history/alarms/{offset}",
         )
         return data
 

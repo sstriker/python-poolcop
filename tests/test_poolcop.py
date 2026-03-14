@@ -218,19 +218,6 @@ async def test_lang_header_custom_value():
     assert headers["X-PoolCopilot-Lang"] == "fr"
 
 
-async def test_alarm_history(poolcop, mock_api):
-    """Test alarm history endpoint."""
-    _mock_auth(mock_api)
-    mock_api.get(
-        f"{BASE_URL}/history/alarms/0",
-        payload={"api_token": {"max_limit": 82}, "alarms": []},
-    )
-
-    async with poolcop:
-        result = await poolcop.alarm_history(0)
-    assert result["alarms"] == []
-
-
 async def test_clear_alarm(poolcop, mock_api):
     """Test clear alarm command."""
     _mock_auth(mock_api)

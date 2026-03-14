@@ -35,7 +35,7 @@ The PoolCopilot API provides access to various features of your PoolCop device:
 
 ### Status Information
 - Water and air temperature
-- pH and ORP (Oxidation-Reduction Potential) values 
+- pH and ORP (Oxidation-Reduction Potential) values
 - Water level status
 - Valve position
 - Pump status and speed
@@ -52,37 +52,35 @@ The PoolCopilot API provides access to various features of your PoolCop device:
 - Set forced filtration mode (24h, 48h, or 72h)
 
 ### History
-- Alarm history
-- Command history
+- Alarm history (with pagination)
+- Command history (with pagination)
+
+### Quota Management
+- `token_limit` — remaining API calls in the current window
+- `token_expire` — epoch timestamp when the current quota window resets
+
+### Options
+- `lang` parameter — sets the `X-PoolCopilot-Lang` header for localised responses
 
 ## Development
 
-This project includes a development container configuration for Visual Studio Code, which provides an isolated, reproducible development environment.
+This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
-### Prerequisites
+```bash
+git clone https://github.com/sstriker/python-poolcop.git
+cd python-poolcop
+poetry install --with dev
+poetry run pytest
+```
 
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [Docker](https://www.docker.com/)
-- [VS Code Remote - Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+### Releasing to PyPI
 
-### Getting Started
+The repository uses [trusted publishing](https://docs.pypi.org/trusted-publishers/) via GitHub Actions. To release:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sstriker/python-poolcop.git
-   cd python-poolcop
-   ```
-
-2. Open the project in VS Code:
-   ```bash
-   code .
-   ```
-
-3. When prompted "Reopen in Container", click it, or run the "Remote-Containers: Reopen in Container" command from the Command Palette (F1).
-
-4. VS Code will build the development container and install all dependencies automatically.
-
-5. Start developing! Your changes will be isolated to the container environment.
+1. Bump the version in `pyproject.toml`
+2. Merge to `main`
+3. Create a GitHub Release (this creates a tag and triggers the publish workflow)
+4. The workflow runs tests, builds with Poetry, and publishes to PyPI automatically
 
 [poolcop]: https://www.poolcop.com/
 [poolcopilot-api]: https://poolcopilot.com/api/docs/
